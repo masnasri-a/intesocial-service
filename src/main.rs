@@ -1,11 +1,20 @@
 mod route;
 mod config;
 mod model;
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, middleware::Logger};
+use actix_web::{post, web, App, HttpResponse, HttpServer, Responder, middleware::Logger};
+use serde::Deserialize;
 
-#[get("/")]
-async fn hello() -> impl Responder {
-    let logins = route::route::login();
+
+#[derive(Deserialize)]
+struct LoginInfo {
+    username: String,
+    password:String,
+}
+
+#[post("/login")]
+async fn login(info:web::Json<LoginInfo>) -> impl Responder {
+    let login_info: LoginInfo = info.into_inner();
+    let logins = route::route::login(login_info.username, login_info.password);
     print!("{}", logins.await);
     HttpResponse::Ok().body("Test")
 }
@@ -21,10 +30,12 @@ async fn manual_hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    std::env::set_var("RUST_LOG", "debug");
+    env_logger::init();
     HttpServer::new(|| {
         App::new()
         .wrap(Logger::default())
-            .service(hello)
+            .service(login)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     }).workers(1)

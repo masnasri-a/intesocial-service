@@ -8,6 +8,10 @@ edition = "2021"
 actix-web = "4"
 serde = "1.0.152"
 dotenv = "0.15.0"
+env_logger = "0.10.0"
+sha2 = "0.9.3"
+actix-swagger = "0.3.1"
+hex = "0.3.2"
 
 [dependencies.mongodb]
 version = "2.3.1"
