@@ -1,0 +1,15 @@
+[package]
+name = "intesocial-service"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+actix-web = "4"
+serde = "1.0.152"
+dotenv = "0.15.0"
+
+[dependencies.mongodb]
+version = "2.3.1"
+default-features = false
+features = ["async-std-runtime"]
