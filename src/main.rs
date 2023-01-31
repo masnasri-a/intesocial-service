@@ -1,6 +1,7 @@
 mod route;
 mod config;
 mod model;
+mod util;
 use actix_web::{post, web, App, HttpResponse, HttpServer, Responder, middleware::Logger};
 use serde::Deserialize;
 
@@ -15,8 +16,7 @@ struct LoginInfo {
 async fn login(info:web::Json<LoginInfo>) -> impl Responder {
     let login_info: LoginInfo = info.into_inner();
     let logins = route::route::login(login_info.username, login_info.password);
-    print!("{}", logins.await);
-    HttpResponse::Ok().body("Test")
+    HttpResponse::Ok().body(logins.await)
 }
 
 #[post("/echo")]
